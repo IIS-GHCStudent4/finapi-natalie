@@ -1,0 +1,54 @@
+{
+  "location": "eastus",
+  "properties": {
+    "dataCollectionEndpointId": "/subscriptions/32751f94-5b0c-4949-be61-de25abe4c0f2/resourceGroups/rg-student02/providers/Microsoft.Insights/dataCollectionEndpoints/dce-lab06",
+    "streamDeclarations": {
+      "Custom-SmokeTestResults_CL": {
+        "columns": [
+          { "name": "TimeGenerated", "type": "datetime" },
+          { "name": "test", "type": "string" },
+          { "name": "status", "type": "string" },
+          { "name": "url", "type": "string" },
+          { "name": "method", "type": "string" },
+          { "name": "duration_seconds", "type": "real" },
+          { "name": "status_code", "type": "int" },
+          { "name": "message", "type": "string" },
+          { "name": "source", "type": "string" }
+        ]
+      },
+      "Custom-PipelineRunSummary_CL": {
+        "columns": [
+          { "name": "TimeGenerated", "type": "datetime" },
+          { "name": "pipeline", "type": "string" },
+          { "name": "run_id", "type": "string" },
+          { "name": "status", "type": "string" },
+          { "name": "start_time", "type": "string" },
+          { "name": "end_time", "type": "string" },
+          { "name": "duration_seconds", "type": "real" }
+        ]
+      }
+    },
+    "destinations": {
+      "logAnalytics": [
+        {
+          "workspaceResourceId": "/subscriptions/32751f94-5b0c-4949-be61-de25abe4c0f2/resourceGroups/rg-student02/providers/Microsoft.OperationalInsights/workspaces/log-analytics-workspace",
+          "name": "law"
+        }
+      ]
+    },
+    "dataFlows": [
+      {
+        "streams": ["Custom-SmokeTestResults_CL"],
+        "destinations": ["law"],
+        "transformKql": "source",
+        "outputStream": "Custom-SmokeTestResults_CL"
+      },
+      {
+        "streams": ["Custom-PipelineRunSummary_CL"],
+        "destinations": ["law"],
+        "transformKql": "source",
+        "outputStream": "Custom-PipelineRunSummary_CL"
+      }
+    ]
+  }
+}
