@@ -9,6 +9,9 @@ resources:
           include:
             - main
 
+variables:
+  - group: LogAnalyticsIngestion
+
 pool:
   name: student-lab-pool
 
@@ -17,8 +20,16 @@ steps:
       /azagent/venv/bin/pip3 install pytest requests
     displayName: "Install dependencies"
 
-  - script: |
-      /azagent/venv/bin/python3 -m pytest -v --tb=line  -W "ignore::DeprecationWarning" -s tests/smoke_tests.py --junitxml=smoke-results.xml
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'AzureDevopsConnection'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        export LOGS_INGESTION_ENDPOINT=$(LOGS_INGESTION_ENDPOINT)
+        export LOGS_INGESTION_DCR_ID=$(LOGS_INGESTION_DCR_ID)
+        export LOGS_INGESTION_TOKEN=$(az account get-access-token --resource https://monitor.azure.com --query accessToken -o tsv)
+        /azagent/venv/bin/python3 -m pytest -v --tb=line  -W "ignore::DeprecationWarning" -s tests/smoke_tests_centralized.py --junitxml=smoke-results.xml
     displayName: "Run full smoke test suite"
 
 
