@@ -16,6 +16,8 @@ variables:
     value: 'rg-student02' # <-- Update this
   - name: webAppName
     value: 'finapi-natalie' # <-- Update this Azure Web App target
+  - group: LogAnalyticsIngestion
+
 
 steps:
   - script: |
