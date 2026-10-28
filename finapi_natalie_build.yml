@@ -14,6 +14,8 @@ pool:
 variables:
   - name: artifactName
     value: 'api'
+  - group: LogAnalyticsIngestion
+
 
 steps:
 - script: |
